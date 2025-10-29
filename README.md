@@ -1,7 +1,7 @@
 # Fullstack Helsinki
 <br>
 
-This repository acts as a single repository for storing all exercises and projects in the course of [Full Stack Open](https:fullstackopen.com/en) course that is offered by University of Helsinki, in collaboration with several companies.
+This repository acts as a single repository for storing all exercises and projects in the course of <a href="https:fullstackopen.com/en">Full Stack Open</a> course that is offered by University of Helsinki, in collaboration with several companies.
 
 <br>
 
