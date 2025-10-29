@@ -25,3 +25,7 @@ sequenceDiagram
     Note left of browser: This process will be the same for<br>new notes added by browser. There is<br>no more fetching html, css, or javascript.
     Note left of browser: The browser will maintain local array<br>for each new input from this client<br>Until they reloading their page, so<br>the local array will be updated from the server's.
 ```
+
+<br>
+
+Now it feels different contrast to what have happened in https://github.com/rchm4tPS/fullstack-helsinki/blob/main/part0/0.4_new_note_diagram/solution_new_note_diagram.md. In 0.4, every time the user add new notes, it directly rerender the whole page, and synchronizing with server's data. But here, in 0.6, the data is kept in client's side, so no synchronization happened until client (browser) doing a page reload to fetch new data (JSON) from server, thus rendering more data to the unordered list in their view that may have not yet been fetched and rendered before because it comes from other clients or browsers that access this server also. 
