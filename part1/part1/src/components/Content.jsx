@@ -1,9 +1,9 @@
 import Part from "./Part";
 
-export default function Content({contents}) {
+export default function Content({parts}) {
     return (
         <div className="content">
-            {contents.map((content, index) => {
+            {parts.map((content, index) => {
                 return (
                     <Part 
                         key={index}
