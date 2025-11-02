@@ -7,8 +7,8 @@ export default function Content({contents}) {
                 return (
                     <Part 
                         key={index}
-                        part={content.part} 
-                        exercise={content.exercise} 
+                        part={content.name} 
+                        exercise={content.exercises} 
                     />
                 )
             })}
