@@ -1,11 +1,14 @@
-const Persons = ({getAllPersons, persons}) => {
-    const renderedNames = getAllPersons()
+const Persons = ({getPersons}) => {
+    const persons = getPersons()
+
+    const renderedNames = persons.map(person => (
+        <p key={person.id} className='name'>
+          {person.name} {person.number}
+        </p>
+      ))
     
     if (renderedNames.length > 0) return (renderedNames)    
-    else {
-        if (persons.length > 0 ) return "The record with than name could not be found . . ."
-        else return "Add some number first . . ."
-    }
+    else return "The record with than name could not be found . . ."
 }
 
 export default Persons

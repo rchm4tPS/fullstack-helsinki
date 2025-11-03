@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -10,14 +12,18 @@ const App = () => {
   const [newName, setNewName] = useState('enter new name')
   const [newNumber, setNewNumber] = useState('enter your number')
   
-  const renderAllNames = () =>
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons')
+      .then(response => response.data)
+      .then(data => setPersons(data))
+  }, [])
+
+  const filteredNames = () =>
     persons
-      .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-      .map(person => (
-        <p key={person.id} className='name'>
-          {person.name} {person.number}
-        </p>
-      ))
+      .filter(person => 
+        person.name.toLowerCase().includes(filter.toLowerCase())
+      )
+      
 
   const handleNewData = (event) => {
     event.preventDefault()
@@ -63,7 +69,10 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons getAllPersons={renderAllNames} persons={persons} />
+      {persons.length > 0 
+        ? <Persons getPersons={filteredNames} />
+        : "No numbers here. Try add some new numbers . . ."
+      }
     </div>
   )
 }
