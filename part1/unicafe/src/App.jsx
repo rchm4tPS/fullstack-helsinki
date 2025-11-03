@@ -17,8 +17,11 @@ const App = () => {
     <div>
       <GiveFeedback 
         onGood={handleGood}
+        goodLabel="good"
         onNeutral={handleNeutral}
+        neutralLabel="neutral"
         onBad={handleBad}
+        badLabel="bad"
       />
       <Statistics 
         good={good}

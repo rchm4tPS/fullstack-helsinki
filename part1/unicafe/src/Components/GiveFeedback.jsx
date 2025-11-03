@@ -1,13 +1,17 @@
+import Button from "./Button"
+
 export default function GiveFeedback ({
-    onGood, onNeutral, onBad
+    onGood, goodLabel, 
+    onNeutral, neutralLabel,
+    onBad, badLabel
 }) 
 {
     return (
       <>
         <h1>give feedback</h1>
-        <button onClick={onGood}>good</button>
-        <button onClick={onNeutral}>neutral</button>
-        <button onClick={onBad}>bad</button>
+        <Button onClicked={onGood} text={goodLabel}></Button>
+        <Button onClicked={onNeutral} text={neutralLabel}></Button>
+        <Button onClicked={onBad} text={badLabel}></Button>
       </>
     )
 }
