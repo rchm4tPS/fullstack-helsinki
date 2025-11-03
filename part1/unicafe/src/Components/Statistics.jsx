@@ -2,6 +2,12 @@ export default function Statistics({
     good, neutral, bad
 })
 {
+    if (good === 0 && neutral === 0 && bad === 0) {
+        return (
+            <p>No feedback given</p>
+        )
+    }
+
     const GOOD_SCORE = 1
     const NEUTRAL_SCORE = 0
     const BAD_SCORE = -1
