@@ -15,9 +15,9 @@ const createNewPerson = async (newPerson) => {
     }
 }
 
-const updateExistingPerson = async (updatedPerson) => {
+const updateExistingPerson = async (updatedId, updatedPerson) => {
     try {
-        const response = await axios.put(`${baseUrl}/${updatedPerson.id}`, updatedPerson)
+        const response = await axios.put(`${baseUrl}/${updatedId}`, updatedPerson)
         return response.data
     } catch (err) {
         console.error(err)

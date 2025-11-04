@@ -61,7 +61,7 @@ const App = () => {
           number: newNumber
         }
 
-        phonebookServices.updateExistingPerson(newDataToUpdate)
+        phonebookServices.updateExistingPerson(newDataToUpdate.id, newDataToUpdate)
           .then(updatedData => {
             setPersons(old => old.map(
               person => person.id === updatedData.id ? updatedData : person
