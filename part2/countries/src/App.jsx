@@ -1,8 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
+import  CountryDetail from './components/CountryDetail'
+import  CountryList  from './components/CountryList'
+import  Weather from './components/Weather'
+
 import './App.css';
 
-// Custom Hook for debouncing a value (no changes here)
+// Custom Hook for debouncing a value
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -19,52 +23,6 @@ const useDebounce = (value, delay) => {
     return debouncedValue;
 };
 
-// Component to display the list of matched countries
-const CountryList = ({ countries, onSelectCountry }) => (
-    <div>
-        {countries.map(country => (
-            <div key={country.name.common} className='list-result'>
-                <span>{country.name.common} </span>
-                <button onClick={() => onSelectCountry(country)}>show</button>
-            </div>
-        ))}
-    </div>
-);
-
-// Component to display the details of a single country
-const CountryDetail = ({ country }) => (
-    <>
-        <h1>{country.name.common}</h1>
-        <span>Capital: {country.capital?.[0]}</span>
-        <br />
-        <span>Area: {country.area} km²</span>
-        <h2>Languages</h2>
-        <ul>
-            {Object.values(country.languages).map(lang => (
-                <li key={lang}>{lang}</li>
-            ))}
-        </ul>
-        <img className='flag-img' src={country.flags.svg} alt={country.flags.alt} />
-    </>
-);
-
-const Weather = ({ capital, weatherData }) => {
-    if (!weatherData) {
-        return <p>Loading weather...</p>;
-    }
-
-    return (
-        <div>
-            <h2>Weather in {capital}</h2>
-            <p>Temperature: {weatherData.main.temp} Celsius</p>
-            <img 
-                src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} 
-                alt={weatherData.weather[0].description} 
-            />
-            <p>Wind: {weatherData.wind.speed} m/s</p>
-        </div>
-    );
-};
 
 // Main App Component
 const App = () => {
@@ -117,7 +75,7 @@ const App = () => {
             setMatchedCountries([]);
             setSelectedCountry(null);
         }
-    }, [debouncedSearchTerm, allCountries]); // <-- CORRECT DEPENDENCY
+    }, [debouncedSearchTerm, allCountries]);
 
     useEffect(() => {
         // If there's no selected country or it has no capital info, do nothing.
