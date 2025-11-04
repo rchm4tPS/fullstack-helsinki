@@ -1,3 +1,13 @@
 .name {
-    margin: 0;
+    margin: 4px 0;
+    display: inline-block;
+}
+
+.btn-delete:hover {
+    background-color: blue;
+    color: white;
+}
+
+span.space::before {
+    content: "   ";
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import phonebookServices from './services/phonebook.js'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -13,8 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('enter your number')
   
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => response.data)
+    phonebookServices.getAllPersons()
       .then(data => setPersons(data))
   }, [])
 
@@ -23,23 +22,6 @@ const App = () => {
       .filter(person => 
         person.name.toLowerCase().includes(filter.toLowerCase())
       )
-      
-
-  const handleNewData = (event) => {
-    event.preventDefault()
-
-    if (!persons.some(person => person.name === newName)) {
-      setPersons(persons.concat({ 
-        id: persons.at(persons.length - 1)?.id + 1 || 1,
-        name: newName,
-        number: newNumber
-      }))
-      setNewName('')
-      setNewNumber('')
-    } else {
-      alert(`${newName} is already added to phonebook`)
-    }
-  }
 
   const handleFilterTyping = (event) => {
     setFilter(event.target.value)
@@ -51,6 +33,58 @@ const App = () => {
 
   const handleNumberTyping = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  const handleNewData = (event) => {
+    event.preventDefault()
+
+    if (!persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
+      const newPersonObj = { 
+        name: newName,
+        number: newNumber
+      }
+
+      phonebookServices.createNewPerson(newPersonObj)
+        .then(resData => setPersons(persons.concat(resData)))
+
+      setNewName('')
+      setNewNumber('')
+    } 
+    // New number for the already existing user with same name
+    // will replace that user's number (PUT) if user confirm this act
+    else {
+      const isUpdateNumber = window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`)
+
+      if (isUpdateNumber) {
+        const newDataToUpdate = {
+          ...persons.find(person => person.name.toLowerCase() === newName.toLowerCase()), 
+          number: newNumber
+        }
+
+        phonebookServices.updateExistingPerson(newDataToUpdate)
+          .then(updatedData => {
+            setPersons(old => old.map(
+              person => person.id === updatedData.id ? updatedData : person
+            ))
+          }
+        ).catch(err => {
+          console.error("Failed to update", err)
+        })
+      }
+    }
+  }
+
+  const handleDeleteOnePerson = (event) => {
+    const deletedId = event.target.dataset.id
+    const deletionConfirmation = window.confirm(
+      `Delete ${persons.find(person => person.id === deletedId).name}`
+    )
+
+    deletionConfirmation && phonebookServices
+      .deletePerson(deletedId)
+      .then(deletedData => setPersons(
+        persons.filter(person => person.id !== deletedData.id)
+      ))
   }
 
   return (
@@ -70,7 +104,10 @@ const App = () => {
 
       <h3>Numbers</h3>
       {persons.length > 0 
-        ? <Persons getPersons={filteredNames} />
+        ? <Persons 
+            getPersons={filteredNames} 
+            onClickDeleteBtn={handleDeleteOnePerson}
+          />
         : "No numbers here. Try add some new numbers . . ."
       }
     </div>
