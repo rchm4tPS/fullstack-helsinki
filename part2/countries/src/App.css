@@ -1,0 +1,17 @@
+input {
+  margin-bottom: 12px;
+}
+
+.list-result {
+  margin: 8px 0;
+}
+
+.flag-img {
+  max-width: 300px;
+  border: 1px solid black;
+}
+
+button:hover,
+button:focus {
+  cursor: pointer;
+}
