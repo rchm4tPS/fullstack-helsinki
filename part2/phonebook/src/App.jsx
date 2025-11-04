@@ -4,6 +4,7 @@ import phonebookServices from './services/phonebook.js'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import './App.css'
 
 const App = () => {
@@ -11,10 +12,20 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('enter new name')
   const [newNumber, setNewNumber] = useState('enter your number')
+  const [errMsg, setErrMsg] = useState(null)
+  const [successMsg, setSuccessMsg] = useState(null)
+
   
   useEffect(() => {
     phonebookServices.getAllPersons()
       .then(data => setPersons(data))
+      .catch(err => {
+          setErrMsg(err.message || err)
+          setTimeout(() => {
+            setErrMsg(null)
+          }, 5000);
+        }
+      )
   }, [])
 
   const filteredNames = () =>
@@ -45,10 +56,24 @@ const App = () => {
       }
 
       phonebookServices.createNewPerson(newPersonObj)
-        .then(resData => setPersons(persons.concat(resData)))
+        .then(resData => {
+          setSuccessMsg(`Successfully added new person contact to the list!`)
+          setPersons(persons.concat(resData))
+          setNewName('')
+          setNewNumber('')
 
-      setNewName('')
-      setNewNumber('')
+          setTimeout(() => {
+            setSuccessMsg(null)
+          }, 5000);
+        })
+        .catch(err => {
+          setErrMsg(err.message || err)
+          setTimeout(() => {
+            setErrMsg(null)
+          }, 5000);
+        })
+
+
     } 
     // New number for the already existing user with same name
     // will replace that user's number (PUT) if user confirm this act
@@ -63,12 +88,20 @@ const App = () => {
 
         phonebookServices.updateExistingPerson(newDataToUpdate.id, newDataToUpdate)
           .then(updatedData => {
+            setSuccessMsg(`Successfully updated person contact with new number!`)
+            setTimeout(() => {
+              setSuccessMsg(null)
+            }, 5000);
+
             setPersons(old => old.map(
               person => person.id === updatedData.id ? updatedData : person
             ))
           }
         ).catch(err => {
-          console.error("Failed to update", err)
+          setErrMsg(err.message || err)
+          setTimeout(() => {
+            setErrMsg(null)
+          }, 5000);
         })
       }
     }
@@ -82,14 +115,29 @@ const App = () => {
 
     deletionConfirmation && phonebookServices
       .deletePerson(deletedId)
-      .then(deletedData => setPersons(
-        persons.filter(person => person.id !== deletedData.id)
-      ))
+      .then(deletedData => {
+        setSuccessMsg(`Successfully deleted person contact from the list!`)
+        setPersons(old => old.filter(person => person.id !== deletedData.id))
+        
+        setTimeout(() => {
+          setSuccessMsg(null)
+        }, 5000);
+
+      })
+      .catch(err => {
+          setErrMsg(err.message || err)
+          setTimeout(() => {
+            setErrMsg(null)
+          }, 5000);
+        }
+      )
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={errMsg || successMsg}/>
 
       <Filter onFilterTyping={handleFilterTyping} filterName={filter} />
 

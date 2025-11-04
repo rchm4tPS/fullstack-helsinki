@@ -1,9 +1,14 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001/persons'
+const DEFAULT_UPDATE_OR_DELETE_MSG = `Either because the server couldn't handle the request or the data has been deleted.`
 
 const getAllPersons = async () => {
-    const response = await axios.get(baseUrl)
-    return response.data
+    try {
+        const response = await axios.get(baseUrl)
+        return response.data
+    } catch(err) {
+        throw new Error(err + ` :: Failed to fetch all person contact . . .`)
+    }
 }
 
 const createNewPerson = async (newPerson) => {
@@ -11,7 +16,7 @@ const createNewPerson = async (newPerson) => {
         const response = await axios.post(baseUrl, newPerson)
         return response.data
     } catch (err) {
-        console.error(err)
+        throw new Error(err + ` :: Failed to create new person contact . . .`)
     }
 }
 
@@ -20,7 +25,7 @@ const updateExistingPerson = async (updatedId, updatedPerson) => {
         const response = await axios.put(`${baseUrl}/${updatedId}`, updatedPerson)
         return response.data
     } catch (err) {
-        console.error(err)
+        throw new Error(`Failed to update existing person contact. ${DEFAULT_UPDATE_OR_DELETE_MSG}`)
     }
 }
 
@@ -29,7 +34,7 @@ const deletePerson = async (id) => {
         const response = await axios.delete(`${baseUrl}/${id}`)
         return response.data
     } catch (err) {
-        console.error(err)
+        throw new Error(`Failed to delete that person contact. ${DEFAULT_UPDATE_OR_DELETE_MSG}`)
     }
 }
 
