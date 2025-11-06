@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 const DEFAULT_UPDATE_OR_DELETE_MSG = `Either because the server couldn't handle the request or the data has been deleted.`
 
 const getAllPersons = async () => {
