@@ -1,9 +1,36 @@
 import express from 'express'
+import morgan from 'morgan'
 
 const PORT = 3001
 
 const app = express()
 app.use(express.json())
+
+// Middleware: Morgan
+// if using tiny configuration (for exercise 3.7)
+// app.use(morgan('tiny'))
+
+morgan.token('body', (req, res) => {
+    if (req.body && Object.keys(req.body).length > 0) {
+        return JSON.stringify(req.body);
+    }
+
+    return '-';
+})
+
+app.use(
+    morgan((tokens, req, res) => {
+        return [
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.status(req, res),
+            tokens.res(req, res, 'content-length'), "-",
+            tokens['response-time'](req, res), "ms",
+            tokens.body(req, res)
+        ].join(' ')
+    })
+)
+
 
 let persons = [
     { 
