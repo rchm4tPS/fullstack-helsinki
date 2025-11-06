@@ -5,6 +5,7 @@ const PORT = 3001
 
 const app = express()
 app.use(express.json())
+app.use(express.static('dist'))
 
 // Middleware: Morgan
 // if using tiny configuration (for exercise 3.7)
@@ -25,7 +26,7 @@ app.use(
             tokens.url(req, res),
             tokens.status(req, res),
             tokens.res(req, res, 'content-length'), "-",
-            tokens['response-time'](req, res), "ms",
+            tokens['response-time'](req, res), "ms", "-",
             tokens.body(req, res)
         ].join(' ')
     })
@@ -116,9 +117,20 @@ app.post('/api/persons', (req, res) => {
 // DELETE group
 app.delete('/api/persons/:id', (req, res) => {
     const personId = req.params.id
-    persons = persons.filter(person => person.id !== personId)
-
-    res.status(204).end()
+    // Return deleted data object back to the front-end
+    // to update its state, so the updated list can be re-rendered
+    const deletedPerson = persons.find(person => person.id === personId)
+    
+    if (deletedPerson) {
+        persons = persons.filter(person => person.id !== personId)
+        
+        return res.json(deletedPerson).status(204)
+    }
+    else {
+        res.status(404).json({
+            error: `Could not delete person with ID ${personId} which does not exist!`
+        }).end()
+    }
 })
 
 // Listening
