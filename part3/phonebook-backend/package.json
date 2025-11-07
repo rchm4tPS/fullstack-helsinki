@@ -11,7 +11,9 @@
     "dev": "node --watch -- index.js"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "mongoose": "^8.3.4",
     "morgan": "^1.10.1"
   }
 }
