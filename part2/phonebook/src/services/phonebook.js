@@ -1,6 +1,5 @@
 import axios from 'axios'
-// const baseUrl = '/api/users' // if this service want to be built with backend
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons' // if this service want to be built with backend
 const DEFAULT_UPDATE_OR_DELETE_MSG = `Either because the server couldn't handle the request or the data has been deleted.`
 
 const getAllPersons = async () => {

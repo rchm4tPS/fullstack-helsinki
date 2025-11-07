@@ -2,7 +2,7 @@ const Persons = ({getPersons, onClickDeleteBtn}) => {
     const renderedNames = getPersons().map(person => (
         <div key={person.id} className="person-line">
           <p className='name'>
-            {person.name} {person.number}
+            {person.name} {person.phone}
           </p>
           <span className="space"></span>
           <button 

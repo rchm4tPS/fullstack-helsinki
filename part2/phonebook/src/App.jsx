@@ -52,12 +52,12 @@ const App = () => {
     if (!persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
       const newPersonObj = { 
         name: newName,
-        number: newNumber
+        phone: newNumber
       }
 
       phonebookServices.createNewPerson(newPersonObj)
         .then(resData => {
-          setSuccessMsg(`Successfully added new person contact to the list!`)
+          setSuccessMsg(`Successfully added new person contact to the database!`)
           setPersons(persons.concat(resData))
           setNewName('')
           setNewNumber('')
@@ -83,7 +83,7 @@ const App = () => {
       if (isUpdateNumber) {
         const newDataToUpdate = {
           ...persons.find(person => person.name.toLowerCase() === newName.toLowerCase()), 
-          number: newNumber
+          phone: newNumber
         }
 
         phonebookServices.updateExistingPerson(newDataToUpdate.id, newDataToUpdate)
@@ -116,7 +116,7 @@ const App = () => {
     deletionConfirmation && phonebookServices
       .deletePerson(deletedId)
       .then(deletedData => {
-        setSuccessMsg(`Successfully deleted person contact from the list!`)
+        setSuccessMsg(`Successfully deleted person contact from the database!`)
         setPersons(old => old.filter(person => person.id !== deletedData.id))
         
         setTimeout(() => {
