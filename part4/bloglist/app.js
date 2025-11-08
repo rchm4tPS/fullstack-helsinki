@@ -12,12 +12,12 @@ const PORT = config.PORT
 const app = express()
 
 mongoose.connect(config.MONGODB_URI)
-    .then(() => {
-        logger.info('Connected to MongoDB instance!')
-    })
-    .catch(err => {
-        logger.error(err)
-    })
+  .then(() => {
+    logger.info('Connected to MongoDB instance!')
+  })
+  .catch(err => {
+    logger.error(err)
+  })
 
 app.use(express.json())
 
