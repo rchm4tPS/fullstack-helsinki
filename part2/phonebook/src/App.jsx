@@ -12,18 +12,18 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('enter new name')
   const [newNumber, setNewNumber] = useState('enter your number')
-  const [errMsg, setErrMsg] = useState(null)
-  const [successMsg, setSuccessMsg] = useState(null)
+  const [notification, setNotification] = useState({
+    type: null,
+    message: null
+  })
 
   
   useEffect(() => {
     phonebookServices.getAllPersons()
       .then(data => setPersons(data))
       .catch(err => {
-          setErrMsg(err.message || err)
-          setTimeout(() => {
-            setErrMsg(null)
-          }, 5000);
+          setNotification({ type: 'error', message: err.response?.data?.error || err.message || err })
+          setTimeout(() => setNotification({ type: null, message: null }), 5000)
         }
       )
   }, [])
@@ -57,20 +57,16 @@ const App = () => {
 
       phonebookServices.createNewPerson(newPersonObj)
         .then(resData => {
-          setSuccessMsg(`Successfully added new person contact to the database!`)
+          setNotification({ type: 'success', message: 'Successfully added new person contact!' })
           setPersons(persons.concat(resData))
           setNewName('')
           setNewNumber('')
 
-          setTimeout(() => {
-            setSuccessMsg(null)
-          }, 5000);
+          setTimeout(() => setNotification({ type: null, message: null }), 5000)
         })
         .catch(err => {
-          setErrMsg(err.message || err)
-          setTimeout(() => {
-            setErrMsg(null)
-          }, 5000);
+          setNotification({ type: 'error', message: err.response?.data?.error || err.message || err })
+          setTimeout(() => setNotification({ type: null, message: null }), 5000)
         })
 
 
@@ -88,20 +84,16 @@ const App = () => {
 
         phonebookServices.updateExistingPerson(newDataToUpdate.id, newDataToUpdate)
           .then(updatedData => {
-            setSuccessMsg(`Successfully updated person contact with new number!`)
-            setTimeout(() => {
-              setSuccessMsg(null)
-            }, 5000);
+            setNotification({ type: 'success', message: 'Successfully updated person contact with new number!' })
+            setTimeout(() => setNotification({ type: null, message: null }), 5000)
 
             setPersons(old => old.map(
               person => person.id === updatedData.id ? updatedData : person
             ))
           }
         ).catch(err => {
-          setErrMsg(err.message || err)
-          setTimeout(() => {
-            setErrMsg(null)
-          }, 5000);
+          setNotification({ type: 'error', message: err.response?.data?.error || err.message || err })
+          setTimeout(() => setNotification({ type: null, message: null }), 5000)
         })
       }
     }
@@ -116,19 +108,15 @@ const App = () => {
     deletionConfirmation && phonebookServices
       .deletePerson(deletedId)
       .then(deletedData => {
-        setSuccessMsg(`Successfully deleted person contact from the database!`)
+        setNotification({ type: 'success', message: 'Successfully deleted person contact from the database!' })
         setPersons(old => old.filter(person => person.id !== deletedData.id))
         
-        setTimeout(() => {
-          setSuccessMsg(null)
-        }, 5000);
+        setTimeout(() => setNotification({ type: null, message: null }), 5000)
 
       })
       .catch(err => {
-          setErrMsg(err.message || err)
-          setTimeout(() => {
-            setErrMsg(null)
-          }, 5000);
+          setNotification({ type: 'error', message: err.response?.data?.error || err.message || err })
+          setTimeout(() => setNotification({ type: null, message: null }), 5000)
         }
       )
   }
@@ -137,7 +125,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={errMsg || successMsg}/>
+      <Notification notification={notification}/>
 
       <Filter onFilterTyping={handleFilterTyping} filterName={filter} />
 
