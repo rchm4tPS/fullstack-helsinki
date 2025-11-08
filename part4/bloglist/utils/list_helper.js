@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const dummy = (blogs) => {
   return 1
 }
@@ -16,8 +18,22 @@ const favoriteBlog = (blogs) => {
   )
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length > 0) {
+    const counts = _.countBy(blogs, 'author')
+    const max = _.max(_.values(counts))
+
+    return Object.entries(counts)
+      .filter(([author, count]) => count === max)
+      .map(([author, count]) => ({ author, blogs: count }))
+  } else {
+    return {}
+  }
+}
+
 export default {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
