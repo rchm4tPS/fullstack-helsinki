@@ -6,7 +6,7 @@ const handleUnknownEndpoint = (req, res) => {
 
 const handleError = (err, req, res, next) => {
   res.status(err.status || 500).json({
-    error: err.content?.message?.data || err.message || err
+    error: err.content?.message?.data || err.message || err || 'Something went wrong on the server!'
   })
 
   next()
