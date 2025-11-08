@@ -1,15 +1,9 @@
-import { configDotenv } from 'dotenv'
+import config from './utils/config.js'
 import mongoose from 'mongoose'
 
-configDotenv()
-
 const {
-  MONGODB_URL_CONNECTION_V1_PREFIX,
-  MONGODB_DB_USER,
-  MONGODB_DB_PASSWORD,
-  MONGODB_DB_CLUSTER_SHARDS,
-  MONGODB_DB_NAME
-} = process.env
+  MONGODB_URI
+} = config
 
 const argsLength = process.argv.length
 let operationType = ''
@@ -42,12 +36,12 @@ const newEntryPhone = process.argv[4]
 // Use this as a primary URL
 // Because apparantly my ISP blocked the connection that
 // use SRV/TXT in IPv4 connection.
-const url = `${MONGODB_URL_CONNECTION_V1_PREFIX}${MONGODB_DB_USER}:${password}@${MONGODB_DB_CLUSTER_SHARDS}/${MONGODB_DB_NAME}?ssl=true&retryWrites=true&w=majority&authSource=admin&appName=Cluster0`
+// const url = `${MONGODB_URL_CONNECTION_V1_PREFIX}${MONGODB_DB_USER}:${password}@${MONGODB_DB_CLUSTER_SHARDS}/${MONGODB_DB_NAME}?ssl=true&retryWrites=true&w=majority&authSource=admin&appName=Cluster0`
 
 // Use this url (uncomment) when using other internet source like from WiFi
 // const url = `${MONGODB_URL_CONNECTION_V2_PREFIX}${MONGODB_DB_USER}:${password}@cluster0.siuncux.mongodb.net/${MONGODB_DB_NAME}?ssl=true&retryWrites=true&w=majority&authSource=admin&appName=Cluster0`
 
-mongoose.connect(url)
+mongoose.connect(MONGODB_URI)
 
 const phoneBookSchema = new mongoose.Schema({
   name: String,
