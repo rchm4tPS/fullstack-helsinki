@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/persons/690e08aaa10a34e59cd91732 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Rachmat Purwa",
+    "number": "12-345-67890"
+}
