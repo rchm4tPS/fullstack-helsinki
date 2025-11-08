@@ -8,7 +8,16 @@ const totalLikes = (blogs) => {
     : 0
 }
 
+const favoriteBlog = (blogs) => {
+  return (
+    blogs.reduce((maxObj, obj) => {
+      return (!maxObj || obj.likes > maxObj.likes) ? obj : maxObj
+    }, null)
+  )
+}
+
 export default {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }

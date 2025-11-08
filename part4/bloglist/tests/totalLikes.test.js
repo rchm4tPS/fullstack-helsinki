@@ -76,7 +76,7 @@ describe('Test total likes', () => {
   )
 
   test(
-    '#5 :: when there are one blog with numbered likes, return appropriate total number of likes',
+    '#5 :: when there are blogs with numbered likes, return appropriate total number of likes',
     () => {
       const listOfNumberedLikesBlogs = [
         {
